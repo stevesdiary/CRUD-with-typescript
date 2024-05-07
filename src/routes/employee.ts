@@ -5,14 +5,8 @@ const router = express.Router();
 router.get('/', EmployeeController.getAllEmployee);
 router.post('/employee', EmployeeController.createEmployee);
 router.get('/employee/:id', EmployeeController.getEmployee);
-// router.post('/employee', EmployeeController.createEmployee);
 
-// router.get('/employees', EmployeeController.getAllEmployees);
+router.put('/:id', EmployeeController.updateEmployee );
 
-// router.get('/:id', EmployeeController.getEmployee );
-
-// router.put('/:id', employeeController.updateEmployee);
-
-// router.put('/:id', employeeController.gEmployee );
-
+router.delete('/:id', EmployeeController.deleteEmployee);
 export default router;
