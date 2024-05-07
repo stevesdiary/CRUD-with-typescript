@@ -12,7 +12,7 @@ const employeeSchema = new mongoose.Schema(
       required: true
     },
     phone: {
-      type: BigInt,
+      type: String,
       required: true
     },
     DOB: {
