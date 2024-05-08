@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { EmployeeModel } from "../models/employee";
-
+// import errorHandler from '../middlewares/errorHandler';
 class EmployeeController{
 
   getAllEmployee = async (request: Request, response: Response, next: NextFunction) => {
@@ -44,7 +44,7 @@ class EmployeeController{
     }
   }
 
-  getEmployee = async (request: Request, response: Response) => {
+  getEmployee = async (request: Request, response: Response, next: NextFunction) => {
     try {
       const id = request.params.id;
       const employee = await EmployeeModel.findById({_id: id});
@@ -61,10 +61,7 @@ class EmployeeController{
       })
     } catch (error) {
       console.log(error);
-      return response.status(400).send({
-        message: "Unable to get record due to error",
-        error: error
-      })
+      return next(error)
     }
   }
 
@@ -88,6 +85,7 @@ class EmployeeController{
           message: "Employee not found",
         });
       }
+      
       return response.status(200).send({
         statusCode: 200,
         message: "Employee updated successfully",
@@ -95,21 +93,24 @@ class EmployeeController{
       })
     } catch (error) {
       console.log(error);
-      return response.status(400).send({
-        message: "Unable to update record due to error",
-        error: error
-      })
+      return next(error);
     }
   }
 
-  deleteEmployee = async (request: Request, response: Response ) => {
+  deleteEmployee = async (request: Request, response: Response, next: NextFunction ) => {
     try {
-      const id = request.params;
-      const record = await EmployeeModel.findByIdAndDelete({id});
+      const id = request.params.id;
+      const record = await EmployeeModel.findByIdAndDelete({_id: id});
+      if (!record) {
+        return response.status(404).send({
+          message: `Record not found for this id: ${id}`,
+        });
+      }
+      console.log(record, "recoord")
       return response.status(200).send({message: "Record deleted successfully"})
     } catch (error) {
       console.log(error);
-      return response.status(400).send({message: "Unable to delete record due to error", error: error})
+      return next(error);
     }
   }
 }
