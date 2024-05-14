@@ -9,33 +9,33 @@ export interface UserDocument extends Document {
 }
 
 const UserSchema = new mongoose.Schema <UserDocument>({
- name: {
+  name: {
     type: String,
     required: true
- },
- email: {
+  },
+  email: {
     type: String,
     required: true
- },
- password: {
+  } ,
+  password: {
     type: String,
     required: true
- },
- type: {
+  },
+  type: {
     type: String,
     required: true
- },
+  },
 }, {
   timestamps: true
 });
 
-UserSchema.pre<UserDocument>("save", async function (next) {
-  if (!this.isModified("password")) {
-    return next();
-  }
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
-  next();
-});
+// UserSchema.pre<UserDocument>("save", async function (next) {
+//   if (!this.isModified("password")) {
+//     return next();
+//   }
+//   const salt = await bcrypt.genSalt(10);
+//   this.password = await bcrypt.hash(this.password, salt);
+//   next();
+// });
 
 export const UserModel = mongoose.model<UserDocument>('User', UserSchema);
