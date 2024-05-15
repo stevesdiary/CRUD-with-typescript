@@ -9,7 +9,8 @@ const employeeSchema = new mongoose.Schema(
     },
     email: {
       type: String,
-      required: true
+      required: true,
+      unique: true
     },
     password: {
       type: String,
@@ -24,6 +25,7 @@ const employeeSchema = new mongoose.Schema(
     },
     DOJ: {
       type: String,
+      default: Date()
     },
   },
   {
