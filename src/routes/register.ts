@@ -1,10 +1,11 @@
 import express from "express";
-import authController from "../controllers/registerController";
+// import authController from "../controllers/registerController";
+import registerController from "../controllers/registerController";
 
 const router = express.Router();
-
-router.post("/register", authController.register);
-router.post("/login", authController.loginUser);
+console.log(process.env.SECRETKEY, "reeeserrejf");
+router.post("/register", registerController.register);
+router.post("/login", registerController.loginUser);
 
 export default router;
 
