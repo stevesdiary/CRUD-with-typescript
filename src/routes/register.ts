@@ -3,9 +3,8 @@ import express from "express";
 import registerController from "../controllers/registerController";
 
 const router = express.Router();
-console.log(process.env.SECRETKEY, "reeeserrejf");
+
 router.post("/register", registerController.register);
-router.post("/login", registerController.loginUser);
 
 export default router;
 
