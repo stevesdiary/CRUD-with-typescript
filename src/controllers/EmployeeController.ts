@@ -30,7 +30,7 @@ class EmployeeController{
         return response.status(400).send({message: 'Employee record already exists'})
       }
       const employee = new EmployeeModel({
-         name, email: email.toLowerCase(), phone, DOB, DOJ
+        name, email: email.toLowerCase(), phone, DOB, DOJ
       });
       await employee.save();
 
