@@ -1,24 +1,35 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { UserModel } from "../models/user";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-const  secret = process.env.SECRETKEY || 'Seekreetkee';
 
-export const loginUser = async (req: Request, res: Response) => {
+
+const loginUser = async (request: Request, response: Response, next: NextFunction) => {
+  const { email, password } = request.body;
   try {
-    const { email, password } = req.body;
-    const user = await UserModel.findOne({ email: email });
-    if (!user) {
-      return res.status(404).send({message: `User not found for ${email}`});
+    const secret = process.env.SECRETKEY || 'secretstring';
+    console.log(secret)
+    if (!email || !password ) {
+      return response.send("Login with registered email and password");
     }
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (isMatch) {
-      const token = jwt.sign({emai: user.email, password: user.password}, secret, {expiresIn: '10 days'});
-      return res.status(200).send({message: "user found", user: user, token: token});
+    const foundUser = await UserModel.findOne({ email });
+    console.log(foundUser);
+    if (!foundUser){
+      return response.send("User email is not correct");
     }
-    return res.status(403).send({message: 'Passwod is not correct'})
+    const isMatch = bcrypt.compareSync(password, foundUser.password);
+    if (isMatch){
+      const token = jwt.sign({ email: foundUser.email, password: foundUser.type }, secret, { expiresIn: '2 days', });
+      let userWithoutPassword = await UserModel.findOne({ email}).select("-password");
+    
+      return response.status(200).send({ message: 'Logged in successfully', user: userWithoutPassword, token });
+    }
+    else {
+      return response.status(403).send("Password is not correct");
+    }
   } catch (error) {
-    console.error(error);
-    return res.status(403).send({ message:"Unable to login", error: error});
+    return next(error);
   }
 }
+
+export default loginUser;
