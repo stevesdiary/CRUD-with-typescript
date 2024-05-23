@@ -21,8 +21,8 @@ const loginUser = async (request: Request, response: Response, next: NextFunctio
     if (isMatch){
       const token = jwt.sign({ email: foundUser.email, password: foundUser.type }, secret, { expiresIn: '2 days', });
       let userWithoutPassword = await UserModel.findOne({ email}).select("-password");
-    
-      return response.status(200).send({ message: 'Logged in successfully', user: userWithoutPassword, token });
+      // delete foundUser['password'] = {foundUser.password};
+      return response.status(200).send({ message: `Logged in successfully as ${foundUser.type}`, userWithoutPassword, token });
     }
     else {
       return response.status(403).send("Password is not correct");
