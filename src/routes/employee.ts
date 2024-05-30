@@ -1,19 +1,16 @@
 import express from 'express';
 import EmployeeController from '../controllers/EmployeeController';
 const router = express.Router();
+import {authentication, verifyUser} from "../middlewares/authentication";
 
-import registerController from "../controllers/registerController";
+router.get('/', authentication, verifyUser('user', 'admin'), EmployeeController.getAllEmployee);
 
-router.post("/register", registerController.register);
+router.post('/employee', authentication, verifyUser('admin'), EmployeeController.createEmployee);
 
-router.get('/', EmployeeController.getAllEmployee);
+router.get('/employee/:id', authentication, verifyUser('user', 'admin'), EmployeeController.getEmployee);
 
-router.post('/employee', EmployeeController.createEmployee);
+router.put('/:id', authentication, verifyUser('user', 'admin'), EmployeeController.updateEmployee );
 
-router.get('/employee/:id', EmployeeController.getEmployee);
-
-router.put('/:id', EmployeeController.updateEmployee );
-
-router.delete('/:id', EmployeeController.deleteEmployee);
+router.delete('/:id', authentication, verifyUser('admin'), EmployeeController.deleteEmployee);
 
 export default router;
