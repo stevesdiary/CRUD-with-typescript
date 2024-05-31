@@ -15,11 +15,11 @@ const loginUser = async (request: Request, response: Response, next: NextFunctio
     const foundUser = await UserModel.findOne({ email });
     console.log(foundUser);
     if (!foundUser){
-      return response.send("User email is not correct");
+      return response.send("User email is not found");
     }
     const isMatch = bcrypt.compareSync(password, foundUser.password);
     if (isMatch){
-      const token = jwt.sign({ email: foundUser.email, password: foundUser.type }, secret, { expiresIn: '2 days', });
+      const token = jwt.sign({ email: foundUser.email, type: foundUser.type }, secret, { expiresIn: '2 days', });
       let userWithoutPassword = await UserModel.findOne({ email}).select("-password");
       // delete foundUser['password'] = {foundUser.password};
       return response.status(200).send({ message: `Logged in successfully as ${foundUser.type}`, userWithoutPassword, token });
@@ -32,4 +32,4 @@ const loginUser = async (request: Request, response: Response, next: NextFunctio
   }
 }
 
-export default loginUser;
+export default { loginUser };
