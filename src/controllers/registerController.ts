@@ -10,7 +10,7 @@ export const register = async (request: Request, response: Response, next: NextF
     }
     const userExists = await UserModel.findOne({email});
     if(userExists){
-      return response.status(400).send({message: `Employee record for ${email} already exists, login with your email and password`})
+      return response.status(400).send({message: `Employee record for ${email} already exists, login with your email and password `})
     }
     const encryptedPassword  = await bcrypt.hash(password, 10)
     const user = await UserModel.create({ name, email: email.toLowerCase(), password: encryptedPassword, type});
@@ -22,6 +22,4 @@ export const register = async (request: Request, response: Response, next: NextF
   }
 };
 
-export default {
-  register,
-}
+export default register;
