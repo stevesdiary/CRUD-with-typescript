@@ -6,10 +6,10 @@ class EmployeeController{
   getAllEmployee = async (request: Request, response: Response, next: NextFunction) => {
     try {
       const employees = await EmployeeModel.find();
-      console.log(employees)
+      console.log("Employees found!😄")
       return response.status(200).send({
         statusCode: 200,
-        message: "Success",
+        message: "Success😄",
         result: employees
       })
     } catch (error) {
