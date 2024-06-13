@@ -1,0 +1,2 @@
+    "dev": "ts-node-dev --poll ./src/index.ts",
+    "build": "rimraf ./dist && tsc"
